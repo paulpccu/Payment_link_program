@@ -1,9 +1,14 @@
 (function () {
   "use strict";
 
+  // This file powers all-payment-links.html.
+  // It reads the same payment-links.config.js file as the automatic router,
+  // then builds a simple table agents can use when automatic routing fails.
+
   const config = window.CROWN_PAYMENT_LINKS || {};
   const camps = Array.isArray(config.camps) ? config.camps : [];
 
+  // Add a plain text table cell to the current row.
   function appendTextCell(row, text, className) {
     const cell = document.createElement("td");
     cell.textContent = text;
@@ -13,6 +18,8 @@
     row.appendChild(cell);
   }
 
+  // Add the payment link cell.
+  // Manual fallback links are kept clean: they go directly to the processor URL in the config.
   function appendLinkCell(row, camp) {
     const cell = document.createElement("td");
     if (camp.paymentUrl) {
@@ -27,6 +34,7 @@
     row.appendChild(cell);
   }
 
+  // Fill the table body with one row per camp from payment-links.config.js.
   function run() {
     const list = document.getElementById("payment-link-list");
     if (!list) {

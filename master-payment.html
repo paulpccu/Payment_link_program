@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crown Payment Link Router</title>
   <style>
+    /* This is the small loading/error page agents see before redirect. */
     body {
       background-color: #fff4ec;
       color: #000;
@@ -35,7 +36,9 @@
       white-space: pre-wrap;
     }
   </style>
+  <!-- payment-links.config.js contains the camp names and processor URLs. -->
   <script src="payment-links.config.js" defer></script>
+  <!-- payment-router.js does the automatic camp detection and redirect. -->
   <script src="payment-router.js" defer></script>
 </head>
 <body>

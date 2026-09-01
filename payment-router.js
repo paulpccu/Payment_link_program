@@ -1,9 +1,20 @@
 (function () {
   "use strict";
 
+  // This file runs in the agent's browser when Vicidial opens master-payment.html.
+  // Its job is simple:
+  // 1. Read the Vicidial values from the URL, especially list_description.
+  // 2. Compare those values against the camp names/abbreviations in payment-links.config.js.
+  // 3. If it finds a matching camp with a payment link, send the agent to that link.
+  // 4. If it cannot find a match, show the customer/list details and a manual backup link.
+
+  // payment-links.config.js creates window.CROWN_PAYMENT_LINKS before this file runs.
+  // If that file fails to load, this fallback keeps the page from crashing immediately.
   const config = window.CROWN_PAYMENT_LINKS || {};
   const camps = Array.isArray(config.camps) ? config.camps : [];
 
+  // Normalize text so matching is forgiving.
+  // Example: "Police & Sheriffs PAC" and "POLICE AND SHERIFFS PAC" both become similar text.
   function normalize(value) {
     return String(value || "")
       .toUpperCase()
@@ -11,6 +22,8 @@
       .replace(/[^A-Z0-9]+/g, "");
   }
 
+  // Vicidial sometimes leaves a variable placeholder in the URL if it has no value.
+  // This removes blank values and placeholder-looking values like --A--field_name--B--.
   function cleanVicidialValue(value) {
     const cleaned = String(value || "").trim();
     if (!cleaned || /^--A--.*--B--$/i.test(cleaned)) {
@@ -19,6 +32,9 @@
     return cleaned;
   }
 
+  // Build one large piece of text for camp detection.
+  // list_description is first because that is the source you wanted to use.
+  // The other fields are backups in case the camp abbreviation/name appears elsewhere.
   function routeText(params) {
     return [
       cleanVicidialValue(params.get("list_description")),
@@ -29,6 +45,9 @@
     ].filter(Boolean).join(" ");
   }
 
+  // Give a camp a matching score based on its aliases.
+  // Higher score wins. Exact full matches get a big bonus.
+  // Longer matches naturally beat shorter matches, which helps avoid bad matches.
   function scoreCamp(camp, normalizedCampText) {
     return (camp.keys || []).reduce(function (bestScore, key) {
       const normalizedKey = normalize(key);
@@ -45,6 +64,7 @@
     }, 0);
   }
 
+  // Compare the Vicidial/list text against every configured camp and return the best match.
   function pickCamp(campText) {
     const normalizedCampText = normalize(campText);
     const result = camps
@@ -64,6 +84,8 @@
     return result ? result.camp : null;
   }
 
+  // Vicidial may provide either a full name or separate first/last name fields.
+  // This helper displays the best available customer name on the fallback error screen.
   function getCustomerName(params) {
     const fullName = cleanVicidialValue(params.get("name")) || cleanVicidialValue(params.get("full_name"));
     if (fullName) {
@@ -75,6 +97,8 @@
     return [firstName, lastName].filter(Boolean).join(" ");
   }
 
+  // Show a readable error page instead of sending the agent to the wrong processor.
+  // This displays the customer/list info available from Vicidial and adds a manual directory link.
   function showError(message, details) {
     const status = document.getElementById("router-status");
     if (status) {
@@ -99,6 +123,9 @@
     document.body.appendChild(fallback);
   }
 
+  // Build the final URL for the selected processor.
+  // If appendVicidialQuery is true in payment-links.config.js, the original URL fields are passed along.
+  // If a processor already has a parameter with the same name, we keep the processor's original value.
   function buildTargetUrl(paymentUrl) {
     const targetUrl = new URL(paymentUrl, window.location.href);
     if (config.appendVicidialQuery !== false) {
@@ -112,10 +139,12 @@
     return targetUrl.toString();
   }
 
+  // Replace the current router page with the chosen payment page.
   function redirectToPayment(paymentUrl) {
     window.location.replace(buildTargetUrl(paymentUrl));
   }
 
+  // Main entry point: this runs once when the page loads.
   function run() {
     const params = new URLSearchParams(window.location.search);
     const campText = routeText(params);
