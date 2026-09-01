@@ -90,6 +90,13 @@
     const detailBox = document.createElement("pre");
     detailBox.textContent = details.join("\n");
     document.body.appendChild(detailBox);
+
+    const fallback = document.createElement("p");
+    const fallbackLink = document.createElement("a");
+    fallbackLink.href = new URL("all-payment-links.html", window.location.href).toString();
+    fallbackLink.textContent = "Open all payment processor links";
+    fallback.appendChild(fallbackLink);
+    document.body.appendChild(fallback);
   }
 
   function buildTargetUrl(paymentUrl) {
@@ -118,6 +125,8 @@
     if (!camp || !paymentUrl) {
       showError("Could not detect a payment link.", [
         "Customer Name: " + (getCustomerName(params) || "NONE"),
+        "Phone Number: " + (cleanVicidialValue(params.get("phone_number")) || "[missing]"),
+        "Lead ID: " + (cleanVicidialValue(params.get("lead_id")) || "[missing]"),
         "List Description: " + (cleanVicidialValue(params.get("list_description")) || "[missing]"),
         "List Name: " + (cleanVicidialValue(params.get("list_name")) || "[missing]"),
         "List ID: " + (cleanVicidialValue(params.get("list_id")) || "[missing]"),
