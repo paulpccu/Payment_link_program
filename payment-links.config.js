@@ -28,13 +28,13 @@
         name: "AMERICAN VETERANS SUPPORT COMMITTEE PAC",
         abbreviation: "AVSC",
         keys: ["avsc","american veterans support committee"],
-        paymentUrl: ""
+        paymentUrl: "https://cpfpac.lovable.app/avsc"
       },
       {
         name: "COALITION FOR HOMELESS AND DISABLED VETERANS PAC",
         abbreviation: "CHDVPAC",
         keys: ["chdvpac","chdv","coalition for homeless and disabled veterans"],
-        paymentUrl: "https://cpfpac.lovable.app/chdv44b"
+        paymentUrl: ""
       },
       {
         name: "COALITION FOR PARAMEDICS AND FIREFIGHTERS PAC",
@@ -82,7 +82,7 @@
         name: "HANDICAPPED VETERANS SERVICE INITIATIVE PAC",
         abbreviation: "HSCDIPAC",
         keys: ["hscdipac","hscdi","hscid","handicapped veterans service initiative"],
-        paymentUrl: ""
+        paymentUrl: "https://donorprocess.com/merchant/handicapped-veterans-service-initiative-pac/"
       },
       {
         name: "LAW ENFORCEMENT AGAINST DRUGS",
@@ -166,7 +166,7 @@
         name: "POLICE OFFICERS ALLIANCE PAC",
         abbreviation: "POAC",
         keys: ["poac","police officers alliance"],
-        paymentUrl: ""
+        paymentUrl: "https://donorprocess.com/merchant/police-officers-alliance-pac/"
       },
       {
         name: "POLICE OFFICERS SUPPORT ASSOCIATION PAC",
@@ -178,7 +178,7 @@
         name: "POLICE OFFICERS SUPPORT COMMITTEE PAC",
         abbreviation: "POSC",
         keys: ["posc","police officers support committee"],
-        paymentUrl: ""
+        paymentUrl: "https://cpfpac.lovable.app/posc"
       },
       {
         name: "TEXAS COALITION OF POLICE AND SHERIFFS",

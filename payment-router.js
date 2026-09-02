@@ -35,13 +35,13 @@
   // Build one large piece of text for camp detection.
   // list_description is first because that is the source you wanted to use.
   // The other fields are backups in case the camp abbreviation/name appears elsewhere.
+  // Do not scan the full URL, because parameter names like lead_id can accidentally match LEAD.
   function routeText(params) {
     return [
       cleanVicidialValue(params.get("list_description")),
       cleanVicidialValue(params.get("list_name")),
       cleanVicidialValue(params.get("list_id")),
-      cleanVicidialValue(params.get("campaign")),
-      window.location.search
+      cleanVicidialValue(params.get("campaign"))
     ].filter(Boolean).join(" ");
   }
 
