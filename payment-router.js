@@ -115,12 +115,6 @@
     detailBox.textContent = details.join("\n");
     document.body.appendChild(detailBox);
 
-    const fallback = document.createElement("p");
-    const fallbackLink = document.createElement("a");
-    fallbackLink.href = new URL("all-payment-links.html", window.location.href).toString();
-    fallbackLink.textContent = "Open all payment processor links";
-    fallback.appendChild(fallbackLink);
-    document.body.appendChild(fallback);
   }
 
   // Build the final URL for the selected processor.
